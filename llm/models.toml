@@ -1,0 +1,74 @@
+# Models and settings for the three-provider coding of the open-ended answers.
+#
+# Each provider has a large model that writes the coding prompt for each
+# variable (designer) and a small model that codes every answer with it
+# (coder). Sampling is left at each provider's default or recommended values
+# at temperature 1. Designers reason at their default level. Coders reason as
+# little as the model allows.
+#
+# Prices are list prices in USD per million tokens [input, output] on
+# 2026-10-23. They are used only to track spending during a run.
+# requests_per_minute is the pace we send at, set below the account limit.
+# requests_per_day, when set, stops the run for the day; rerun the next day to continue.
+
+[anthropic]
+designer = "claude-opus-5-5"
+designer_effort = "medium"            # model default; thinking cannot be turned off
+designer_max_tokens = 16000
+coder = "claude-haiku-5-5"
+coder_max_tokens = 16                 # thinking is turned off, the answer is a number
+designer_price = [4.00, 20.00]
+coder_price = [0.10, 0.50]
+requests_per_minute = 5500            # limits 20,000 RPM and 10M input tokens/min; with Opus's
+                                      # prompts (~1,570 tokens a call) the token limit binds first
+max_concurrent = 300
+budget_usd = 50
+
+[google]
+designer = "gemini-4-argon"           # thinking at the model default (medium)
+coder = "gemini-3.5-flash-lite"
+coder_temperature = 1.0               # Google's recommended value for Gemini 3
+coder_thinking_level = "minimal"      # lowest level; does not guarantee zero thinking
+coder_max_tokens = 256                # includes any thinking tokens
+designer_price = [2.00, 10.00]        # introductory price until 2026-11-30
+coder_price = [0.30, 2.50]
+requests_per_minute = 3600            # AI Studio limit 4,000 RPM and 4M tokens/min (2026-10-23)
+requests_per_day = 140000             # AI Studio limit 150,000 a day, reset at midnight Pacific time;
+                                      # the rest of the run goes through [google_openrouter]
+max_concurrent = 200
+budget_usd = 55                       # the run stops here (credit is $60)
+
+[openai]
+# GPT-OSS is not served by OpenAI's own API. We use OpenRouter, pinned to one
+# host serving the full-precision (bf16) weights, with no fallback to other hosts.
+base_url = "https://openrouter.ai/api/v1"
+host = "deepinfra"
+quantization = "bf16"
+designer = "openai/gpt-oss-120b"      # reasoning at the model default (medium)
+designer_max_tokens = 16000
+coder = "openai/gpt-oss-20b"
+coder_temperature = 1.0               # OpenAI's recommendation for gpt-oss
+coder_top_p = 1.0
+coder_reasoning_effort = "low"        # lowest level; reasoning cannot be turned off
+coder_max_tokens = 512                # includes the reasoning tokens
+designer_price = [0.037, 0.17]
+coder_price = [0.03, 0.14]
+requests_per_minute = 6000
+max_concurrent = 300
+budget_usd = 7                        # OpenRouter balance $31.66 on 2026-10-23, shared with [google_openrouter]
+
+[google_openrouter]
+# The same Gemini coder reached through OpenRouter instead of Google's own API,
+# pinned to Google AI Studio with no fallback. It uses the prompts written by
+# Gemini 4 Argon (prompts_from) and the same coding settings as [google].
+base_url = "https://openrouter.ai/api/v1"
+host = "google-ai-studio"
+prompts_from = "google"
+coder = "google/gemini-3.5-flash-lite"
+coder_temperature = 1.0
+coder_reasoning_effort = "minimal"
+coder_max_tokens = 256
+coder_price = [0.30, 2.50]
+requests_per_minute = 3600
+max_concurrent = 200
+budget_usd = 24                       # with [openai], stays under the OpenRouter balance
