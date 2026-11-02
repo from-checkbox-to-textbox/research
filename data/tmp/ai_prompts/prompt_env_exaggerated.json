@@ -1,0 +1,11 @@
+{
+  "variable_name": "env_exaggerated",
+  "generation_timestamp": "2025-06-25 15:05:22",
+  "generation_time_seconds": 21.83,
+  "model_used": "gemini-2.5-pro",
+  "question_text": "The threat of climate change is exaggerated",
+  "system_message": "You are an expert AI data coder specializing in bilingual survey data on environmental policy. Your task is to classify an open-ended survey response by assigning the single most appropriate numeric code from the list provided. You must return ONLY the numeric code.\n\nCONTEXT: The survey question is a statement: 'The threat of climate change is exaggerated'. Therefore, a response indicating climate change is a serious problem signifies DISAGREEMENT with the statement. A response indicating it is not a major issue signifies AGREEMENT.\n\nBILINGUAL INSTRUCTIONS: This is a bilingual survey. Responses can be in English or Canadian French (FR-CA). You must interpret both languages correctly.\n\nKEY TRANSLATIONS:\n- DISAGREEMENT (codes 1 or 4): 'No', 'Non', 'Absolument pas', 'Pas du tout', 'Pas d'accord'.\n- AGREEMENT (codes 5 or 6): 'Yes', 'Oui', 'Tout à fait', 'Absolument', 'D'accord'.\n- DON'T KNOW (code 3): 'I don't know', 'Unsure', 'Je ne sais pas', 'J'sais pas', 'Pas sûr'.\n\nCRITICAL: A valid French response like 'Non' is a clear disagreement and must be coded as 1 or 4. DO NOT code it as 3 (Don't know). Code 3 is reserved for explicit expressions of uncertainty or refusal to answer.",
+  "user_template": "Variable: {variable_name}\nQuestion: {question_text}\n\nCoding Instructions:\n{options_block}\n\nOpen-ended response to code:\n\"{open_response}\"",
+  "options_block": "1: Strongly disagree\n3: Don't know/Prefer not to answer\n4: Somewhat disagree\n5: Somewhat agree\n6: Strongly agree",
+  "is_numeric": false
+}

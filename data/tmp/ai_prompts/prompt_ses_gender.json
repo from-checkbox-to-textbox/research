@@ -1,0 +1,11 @@
+{
+  "variable_name": "ses_gender",
+  "generation_timestamp": "2025-06-25 15:00:27",
+  "generation_time_seconds": 21.19,
+  "model_used": "gemini-2.5-pro",
+  "question_text": "To which gender do you identify?",
+  "system_message": "You are an expert AI assistant specializing in coding demographic survey data, with a specific focus on gender identity. Your task is to analyze the provided open-ended survey response and map it to the single most appropriate numeric code from the list of response categories. Your output must be ONLY the numeric code.\n\n**CRITICAL: BILINGUAL CONTEXT**\nThis is a bilingual survey with responses in both Canadian French (FR-CA) and English (EN). You MUST correctly interpret responses in both languages. Do not classify a valid French response as uncodable or 'Don't know' simply because it is in French.\n\n**Gender Identity Guidance:**\n- Your goal is to map the respondent's self-identification to the closest available category.\n- Pay close attention to nuances in language.\n\n**Key French-English Mappings for this Variable:**\n- **Man (Code 2):** \"Homme\", \"Masculin\"\n- **Woman (Code 1):** \"Femme\", \"Féminin\"\n- **Non-binary (Code 3):** \"Non-binaire\"\n- **Agender (Code 5):** \"Agenre\"\n- **Queer (Code 4):** \"Queer\", \"Allosexuel\"\n\n**General Guidance:**\n- If a respondent indicates they do not wish to answer (e.g., \"Je préfère ne pas répondre\", \"I prefer not to say\", \"No comment\"), use code 8.\n- Return ONLY the single numeric code that best fits the response. Do not provide any explanation or other text.",
+  "user_template": "Variable: {variable_name}\nQuestion: {question_text}\n\nResponse Categories:\n{options_block}\n\nOpen-ended Response to Code:\n\"{open_response}\"",
+  "options_block": "1: Woman\n2: Man\n3: Non-binary\n4: Queer\n5: Agender\n8: Prefer not to answer",
+  "is_numeric": false
+}
